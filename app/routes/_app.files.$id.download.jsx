@@ -1,7 +1,7 @@
-import { readFile } from "fs/promises";
 import { existsSync } from "fs";
 import { authenticate } from "../shopify.server";
 import prisma from "../db.server";
+import { readFileBuffer } from "../files.server";
 
 export const loader = async ({ request, params }) => {
   const { session } = await authenticate.admin(request);
@@ -19,7 +19,7 @@ export const loader = async ({ request, params }) => {
     throw new Response("File not found on disk", { status: 404 });
   }
 
-  const fileBuffer = await readFile(fileRecord.path);
+  const fileBuffer = await readFileBuffer(fileRecord.path);
 
   return new Response(fileBuffer, {
     headers: {
